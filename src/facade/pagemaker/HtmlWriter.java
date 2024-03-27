@@ -14,7 +14,7 @@ import java.io.Writer;
  * -----------------------------------------------------------
  * 2024-03-25        ipeac       최초 생성
  */
-public class HtmlWriter {
+class HtmlWriter {
     private Writer writer;
     
     public HtmlWriter(Writer writer) {

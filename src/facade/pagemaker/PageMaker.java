@@ -2,6 +2,8 @@ package facade.pagemaker;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -30,6 +32,23 @@ public class PageMaker {
             writer.mailto(mailaddr, username);
             writer.close();
             System.out.println(filename + " is created for " + mailaddr + " (" + username + ")");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void makeLinkPage(String fileName) {
+        try {
+            Properties mailprop = Database.getProperties("maildata");
+            ArrayList<Object> objects = new ArrayList<>();
+            HtmlWriter writer = new HtmlWriter(new FileWriter(fileName));
+            writer.title("Link page");
+            
+            for (Map.Entry<Object, Object> objectObjectEntry : mailprop.entrySet()) {
+                writer.mailto((String) objectObjectEntry.getKey(), (String) objectObjectEntry.getValue());
+            }
+            
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

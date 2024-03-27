@@ -254,3 +254,44 @@ public class PageMaker {
 2. `Singleton 패턴`
 
 3. `Mediator 패턴`
+
+## 문제
+
+1. 클래스 설계자는 앞으로의 확장이나 프로그램 개선에 대비해 PageMaker 클래스만 pagemaker 패키지 밖
+   에서 이용할 수 있게 만들고 싶습니다. Database 클래스와 HtmlWriter 클래스를 pagemaker 패키지 밖에
+   서 이용할 수 없게 하려면 예제 프로그램을 어떻게 변경해야 할까요?
+
+    - 내가 생각하는 답변 : 접근제한자 관련 질문같다. Database 클래스와 HtmlWriter 클래스의 접근제한자를 `package-private` 으로 변경하면 된다.
+    - Java 의 경우 별도 접근제한자를 명시하지 않는 경우 패키지 레벨의 접근제한을 가지게 된다.
+
+2. 데이터 파일 maildata.txt(리스트 15-2)에 포함된 사용자의 이메일 주소 링크 페이지를 만드는 makeLinkPage 메소드를 PageMaker 클래스에 추가하세요. 호출은 리스트 15-6처럼 합니다.
+   만들어진 링크 페이지는 그림 15-8과 같습니다(화면은 그림 15-9).
+   ![img_3.png](img_3.png)
+   ![img_4.png](img_4.png)
+
+   ```java 
+   public static void makeLinkPage(String fileName) {
+        try {
+            Properties mailprop = Database.getProperties("maildata");
+            ArrayList<Object> objects = new ArrayList<>();
+            HtmlWriter writer = new HtmlWriter(new FileWriter(fileName));
+            writer.title("Link page");
+            
+            for (Map.Entry<Object, Object> objectObjectEntry : mailprop.entrySet()) {
+                writer.mailto((String) objectObjectEntry.getKey(), (String) objectObjectEntry.getValue());
+            }
+            
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+   }
+   ```
+
+3. 예제 프로그램의 HtmlWriter 클래스(리스트 15-3)에서는 HTML을 기술하기 위해서 많은 문자열 리터
+럴(""로 묶인 문자열)이 등장했습니다. 그런데 Java에는 여러 줄에 걸친 문자열 리터럴을 읽기 쉽게 기
+술하기 위한 텍스트 블록(text block)이 있습니다. 그 예를 살펴보겠습니다.
+텍스트 블록은 리스트 15-7처럼 큰따옴표 3개를 짝을 지어 만듭니다. 텍스트 블록을 시작하는 직후
+에 행을 바꾸고, 그 다음 행부터 텍스트 블록이 끝나는 "''''까지를 문자열로 취급합니다. 단, 각 행 시작
+부분의 공백은 종료를 나타내는 "'''의 들여쓰기 위치에 맞춰 무시됩니다. 텍스트 블록 안의 "를 "처럼
+쓸 필요가 없습니다. 리스트 15-7을 실행하면 어떻게 출력될까요?
